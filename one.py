@@ -1,25 +1,18 @@
 import torch
 
-def unpickle(file):
-    import pickle
-    with open(file, 'rb') as fo:
-        dict = pickle.load(fo, encoding='bytes')
-    return dict
+features,samples,neurons,classes=64,1000,100,10
 
-cifar=unpickle("C:\\Users\\user\\Documents\\ML\\cifar-10-batches-py\\data_batch_1")
-
-N,D_in,H,D_out=64,1000,100,10
-x=torch.randn(N, D_in)
-y=torch.randn(N, D_out)
+x=torch.randn(samples,features)
+y=torch.randn(samples, classes)
 
 model=torch.nn.Sequential(
-    torch.nn.Linear(D_in,H),
+    torch.nn.Linear(features,neurons),
     torch.nn.ReLU(),
-    torch.nn.Linear(H,D_out)
+    torch.nn.Linear(neurons,classes)
 )
 
 learning_rate=1e-2
-for t in range(500):
+for t in range(1500):
     y_pred=model(x)
     loss=torch.nn.functional.mse_loss(y_pred,y)
 
@@ -31,7 +24,4 @@ for t in range(500):
     model.zero_grad()
 
     print(loss)
-
-print(cifar.keys())
-print(cifar[b'batch_label'].decode('utf-8'))
 
